@@ -88,9 +88,9 @@ class TelegramWorker:
         except Exception as e:
             return False, str(e)
 
-    async def get_unread_dialogs(self, limit=30):
+    async def get_unread_dialogs(self, limit=120):
         dialogs = await self.client.get_dialogs(limit=limit, archived=False)
-        return [d for d in dialogs if d.unread_count > 0]
+        return [d for d in dialogs if d.unread_count > 0 or True] #now i'm show all
 
     async def get_chat_history(self, dialog):
         unread = dialog.unread_count
@@ -563,6 +563,7 @@ class MainWindow(QMainWindow):
                 prompt = (
                     f"Role: Personal Assistant. Analyze the correspondence in chat '{dialog.name}'.\n"
                     f"IMPORTANT: Messages have format '[ID:...] [ReplyTo:...] Name: Text'. "
+                    f"IMPORTANT: Answer in main language of chat messages"
                     f"Use ReplyTo to understand who is replying to whom.\n\n"
                     f"--- CONTEXT (already read) ---\n{context_str}\n"
                     f"================================\n"
